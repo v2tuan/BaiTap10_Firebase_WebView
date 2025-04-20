@@ -66,4 +66,11 @@ dependencies {
 
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+    // Load ảnh với Glide
+    implementation("com.github.bumptech.glide:glide:4.14.2")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+
 }

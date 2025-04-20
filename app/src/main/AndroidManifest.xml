@@ -18,6 +18,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.VideoShortAPIServerActivity"
             android:exported="false" />
         <activity
@@ -27,7 +36,7 @@
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.WebViewActivity"
+            android:name=".activity.SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

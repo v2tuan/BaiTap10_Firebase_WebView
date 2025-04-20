@@ -1,5 +1,6 @@
 package com.example.baitap10_firebase_webview.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,12 +16,14 @@ import com.example.baitap10_firebase_webview.R;
 import com.example.baitap10_firebase_webview.adapter.VideoFireBaseAdapter;
 import com.example.baitap10_firebase_webview.model.VideoModel;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class VideoShortActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private VideoFireBaseAdapter videosAdapter;
+    private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,17 @@ public class VideoShortActivity extends AppCompatActivity {
 
         viewPager2 = findViewById(R.id.vpager);
         getVideos();
+
+        // Xử lý sự kiện chọn item
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_profile) {
+                Intent intent = new Intent(VideoShortActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+            return true;
+        });
+
     }
 
     private void getVideos() {

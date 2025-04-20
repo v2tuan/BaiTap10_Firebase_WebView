@@ -1,7 +1,9 @@
 package com.example.baitap10_firebase_webview.adapter;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +15,21 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.baitap10_firebase_webview.R;
+import com.example.baitap10_firebase_webview.model.User;
 import com.example.baitap10_firebase_webview.model.VideoModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<VideoModel,VideoFireBaseAdapter.MyHolder> {
     private boolean isFav = false;
+    private Context context;
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
@@ -69,12 +79,36 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<VideoModel,Vid
                 }
             }
         });
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(model.getUserId());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Hoặc Cách 2: Đổ thẳng vào một object
+                    User user = snapshot.getValue(User.class);
+                    Glide.with(context).load(user.getProfileImageUrl())
+                            .into(holder.imPerson);
+                    holder.textVideoTitle.setText(user.getName());
+                    // In ra thử
+                    Log.d("TAG", "Tên: " + user.getName() + ", Email: " + user.getEmail());
+                } else {
+                    Log.d("TAG", "Người dùng không tồn tại");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("TAG", "Lỗi khi đọc dữ liệu", error.toException());
+            }
+        });
     }
 
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_video_row, parent, false);
+        context = parent.getContext();
         return new MyHolder(view);
     }
 
